@@ -8,18 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Frontend\src\js\custom.js" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Frontend\src\js\custom.js">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Frontend\src\assets\" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 </Project>
