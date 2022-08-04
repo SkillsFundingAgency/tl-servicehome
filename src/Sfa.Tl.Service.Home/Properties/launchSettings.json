@@ -8,11 +8,11 @@
     }
   },
   "profiles": {
-    "T_Levels_Service_Home": {
+    "Sfa.Tl.Service.Home": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:7180;http://localhost:5180",
+      "applicationUrl": "https://localhost:7180",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

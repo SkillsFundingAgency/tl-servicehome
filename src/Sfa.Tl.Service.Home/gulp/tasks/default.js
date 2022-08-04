@@ -5,7 +5,7 @@ var gulp = require('gulp'),
     minify = require('gulp-minify'),
     sass = require('gulp-sass')(require('node-sass')),
     wait = require('gulp-wait'),
-    purgecss = require('gulp-purgecss')
+    purgecss = require('gulp-purgecss');
 
 const paths = require('../paths.json');
 const sassOptions = require('../sassOptions.js');

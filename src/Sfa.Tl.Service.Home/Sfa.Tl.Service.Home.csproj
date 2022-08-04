@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>T_Levels_Service_Home</RootNamespace>
+    <RootNamespace>Sfa.Tl.Service.Home</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
