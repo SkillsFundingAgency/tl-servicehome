@@ -48,16 +48,6 @@ gulp.task('sass', () => {
             .pipe(gulp.dest(paths.dist.SCSS));
 });
 
-gulp.task('purifycss', function () {
-    return gulp.src('wwwroot/css/main.css')
-        .pipe(wait(400))
-        .pipe(purgecss({
-            content: ['Views/**/*.cshtml', 'wwwroot/**/*.js'],
-        }))
-        .pipe(gulp.dest(paths.dist.SCSS))
-});
-
-
 gulp.task('sitemap', () => {
     return src(paths.src.Assets + "sitemap.xml")
         .pipe(gulp.dest(paths.dist.default));
