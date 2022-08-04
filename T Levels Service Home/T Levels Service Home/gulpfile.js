@@ -1,4 +1,4 @@
-/// <binding BeforeBuild='dev' />
+/// <binding BeforeBuild='default' />
 
 var gulp = require('gulp');
 
