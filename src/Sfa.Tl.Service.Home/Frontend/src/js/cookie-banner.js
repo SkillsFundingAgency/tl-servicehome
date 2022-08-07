@@ -61,4 +61,38 @@
 }).call(this);
 
 
+/* Set cookie on accept */
 
+$("button[value='accept']").click(function () {
+    console.log("Cookies set analytics accepted");
+    GOVUK.cookie('cookies.analytics', 'true', { days: 365 });
+    GOVUK.cookie('cookies.essential', 'true', { days: 365 });
+    $("#govuk-cookie-banner__message").attr("hidden", "true");
+    $("#govuk-cookie-banner__accepted").removeAttr("hidden");
+});
+
+
+/* Set cookie on reject */
+
+$("button[value='reject']").click(function () {
+    console.log("Cookies set analytics rejected");
+    GOVUK.cookie('cookies.analytics', 'false', { days: 365 });
+    GOVUK.cookie('cookies.essential', 'true', { days: 365 });
+    $("#govuk-cookie-banner__message").attr("hidden", "true");
+    $("#govuk-cookie-banner__rejected").removeAttr("hidden");
+
+});
+
+/* Show Hide Banner */
+
+var essentialcookies = GOVUK.cookie('cookies.essential')
+
+$(document).ready(function () {
+    if (essentialcookies === "true") {
+        $(".govuk-cookie-banner").attr("hidden", "true");
+    }
+});
+
+$("button[value='hide']").click(function () {
+    $(".govuk-cookie-banner").attr("hidden", "true");
+});
