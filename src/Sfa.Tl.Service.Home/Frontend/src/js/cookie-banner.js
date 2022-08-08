@@ -85,10 +85,10 @@ $("button[value='reject']").click(function () {
 
 /* Show Hide Banner */
 
-var essentialcookies = GOVUK.cookie('cookies.essential')
+var essentialCookies = GOVUK.cookie('cookies.essential');
 
 $(document).ready(function () {
-    if (essentialcookies === "true") {
+    if (essentialCookies === "true") {
         $(".govuk-cookie-banner").attr("hidden", "true");
     }
 });
