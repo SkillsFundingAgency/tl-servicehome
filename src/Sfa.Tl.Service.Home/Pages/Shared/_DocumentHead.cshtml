@@ -1,6 +1,7 @@
 ﻿<head>
   <meta charset="utf-8">
-    <title>@ViewData["Title"]</title>
+  <title>@PageExtensions.GenerateTitle(ViewData["Title"]?.ToString(), ViewData.ModelState.IsValid)</title>
+
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0b0c0c">
 
