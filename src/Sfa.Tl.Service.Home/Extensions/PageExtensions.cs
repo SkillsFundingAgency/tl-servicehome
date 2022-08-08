@@ -7,6 +7,8 @@ public static class PageExtensions
     private const string ServiceName = "T Levels Service Home";
     private const string GovUk = "GOV.UK";
 
+    public static string GetServiceName() => ServiceName;
+
     public static string GenerateTitle(
         string? title,
         bool isValid)
