@@ -1,3 +1,5 @@
+using Sfa.Tl.Service.Home.Security;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
@@ -25,12 +27,32 @@ if (!builder.Environment.IsDevelopment())
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
+
+app.UseXContentTypeOptions()
+   .UseReferrerPolicy(opts => opts.NoReferrer())
+   .UseXXssProtection(opts => opts.EnabledWithBlockMode())
+   .UseXfo(xfo => xfo.Deny())
+   .UseCsp(options => options
+       .ObjectSources(s => s.None())
+       .ScriptSources(s => s
+           .CustomSources("https:",
+                "https://www.google-analytics.com/analytics.js",
+                "https://www.googletagmanager.com/",
+                "https://tagmanager.google.com/")
+           .UnsafeInline()
+       ))
+       .Use(async (context, next) =>
+       {
+           context.Response.Headers.Add("Expect-CT", "max-age=0, enforce"); //Not using report-uri=
+           context.Response.Headers.Add("Feature-Policy", SecurityPolicies.FeaturesList);
+           context.Response.Headers.Add("Permissions-Policy", SecurityPolicies.PermissionsList);
+           await next.Invoke();
+       });
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
