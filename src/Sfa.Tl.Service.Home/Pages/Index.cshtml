@@ -6,6 +6,19 @@
 
 <h1 class="govuk-heading-xl">@PageExtensions.GetServiceName()</h1>
 
-<p><a href="@Model.EmployerSupportSiteUrl">Employer Support</a></p>
-<p><a href="@Model.ProviderSupportSiteUrl">Provider Support</a></p>
-<p><a href="@Model.ResultsAndCertificationsSiteUrl">Results and Certifications Site</a></p>
+@if (!string.IsNullOrEmpty(@Model.EmployerSupportSiteUrl))
+{
+    <p><a href="@Model.EmployerSupportSiteUrl">Employer Support</a></p>
+}
+@if (!string.IsNullOrEmpty(@Model.ProviderSupportSiteUrl))
+{
+    <p><a href="@Model.ProviderSupportSiteUrl">Provider Support</a></p>
+}
+@if (!string.IsNullOrEmpty(@Model.ProviderDataSiteUrl))
+{
+    <p><a href="@Model.ProviderDataSiteUrl">Provider Data/EoI</a></p>
+}
+@if (!string.IsNullOrEmpty(@Model.ResultsAndCertificationsSiteUrl))
+{
+    <p><a href="@Model.ResultsAndCertificationsSiteUrl">Results and Certifications Site</a></p>
+}
