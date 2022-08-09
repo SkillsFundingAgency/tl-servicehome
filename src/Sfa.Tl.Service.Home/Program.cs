@@ -3,9 +3,7 @@ using Sfa.Tl.Service.Home.Security;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-    .AddApplicationInsightsTelemetry()
-    //.AddSingleton(siteConfiguration)
-    ;
+    .AddApplicationInsightsTelemetry();
 
 builder.Services.Configure<CookiePolicyOptions>(options =>
 {
@@ -14,6 +12,8 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
     options.Secure = CookieSecurePolicy.Always;
     options.MinimumSameSitePolicy = SameSiteMode.None;
 });
+
+builder.Services.AddResponseCaching();
 
 builder.Services.AddRazorPages();
 
@@ -36,8 +36,8 @@ if (!app.Environment.IsDevelopment())
 app.UseXContentTypeOptions()
    .UseReferrerPolicy(opts => opts.NoReferrer())
    .UseXXssProtection(opts => opts.EnabledWithBlockMode())
-   .UseXfo(xfo => xfo.Deny())
    .UseCsp(options => options
+       .FrameAncestors(s => s.None())
        .ObjectSources(s => s.None())
        .ScriptSources(s => s
            .CustomSources("https:",
@@ -48,8 +48,7 @@ app.UseXContentTypeOptions()
        ))
        .Use(async (context, next) =>
        {
-           context.Response.Headers.Add("Expect-CT", "max-age=0, enforce"); //Not using report-uri=
-           context.Response.Headers.Add("Feature-Policy", SecurityPolicies.FeaturesList);
+           context.Response.Headers.Add("Expect-CT", "max-age=0, enforce");
            context.Response.Headers.Add("Permissions-Policy", SecurityPolicies.PermissionsList);
            await next.Invoke();
        });
@@ -66,5 +65,7 @@ app.MapFallback("{*path}",
     () => Results.Redirect("/Error/404"));
 
 app.MapRazorPages();
+
+app.UseResponseCaching();
 
 app.Run();
