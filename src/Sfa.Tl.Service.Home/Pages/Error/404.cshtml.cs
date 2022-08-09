@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Sfa.Tl.Service.Home.Pages;
+namespace Sfa.Tl.Service.Home.Pages.Error;
 
 public class Error404Model : PageModel
 {

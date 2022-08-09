@@ -62,6 +62,9 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+app.MapFallback("{*path}", 
+    () => Results.Redirect("/Error/404"));
+
 app.MapRazorPages();
 
 app.Run();
