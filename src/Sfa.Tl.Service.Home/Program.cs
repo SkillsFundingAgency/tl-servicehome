@@ -1,11 +1,19 @@
+using Sfa.Tl.Service.Home.Configuration;
+using Sfa.Tl.Service.Home.Extensions;
 using Sfa.Tl.Service.Home.Security;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var siteConfiguration = builder.Configuration.LoadConfigurationOptions();
+
 builder.Services
-    .AddApplicationInsightsTelemetry()
-    //.AddSingleton(siteConfiguration)
-    ;
+    .AddApplicationInsightsTelemetry();
+
+builder.Services
+    .Configure<LinkSettings>(x =>
+    {
+        x.ConfigureLinkSettings(siteConfiguration.LinkSettings);
+    });
 
 builder.Services.Configure<CookiePolicyOptions>(options =>
 {
