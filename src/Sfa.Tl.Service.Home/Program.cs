@@ -79,3 +79,5 @@ app.MapRazorPages();
 app.UseResponseCaching();
 
 app.Run();
+
+public partial class Program { }; //Required so tests can see this class
