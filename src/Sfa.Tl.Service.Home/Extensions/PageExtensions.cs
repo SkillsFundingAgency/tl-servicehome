@@ -11,7 +11,7 @@ public static class PageExtensions
 
     public static string GenerateTitle(
         string? title,
-        bool isValid)
+        bool isValid = true)
     {
         var ignoreTitle = title == ServiceName;
         const string titleSuffix = $"{ServiceName} - {GovUk}";
