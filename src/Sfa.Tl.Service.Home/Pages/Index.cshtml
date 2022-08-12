@@ -8,19 +8,19 @@
 
     <h1 class="govuk-heading-xl">@PageExtensions.GetServiceName()</h1>
 
-    @if (!string.IsNullOrEmpty(@Model.EmployerSupportSiteUrl))
+    @if (!string.IsNullOrEmpty(Model.EmployerSupportSiteUrl))
     {
         <p class="govuk-body"><a class="govuk-link" href="@Model.EmployerSupportSiteUrl">Employer Support</a></p>
     }
-    @if (!string.IsNullOrEmpty(@Model.ProviderSupportSiteUrl))
+    @if (!string.IsNullOrEmpty(Model.ProviderSupportSiteUrl))
     {
         <p class="govuk-body"><a class="govuk-link" href="@Model.ProviderSupportSiteUrl">Provider Support</a></p>
     }
-    @if (!string.IsNullOrEmpty(@Model.ProviderDataSiteUrl))
+    @if (!string.IsNullOrEmpty(Model.ProviderDataSiteUrl))
     {
         <p class="govuk-body"><a class="govuk-link" href="@Model.ProviderDataSiteUrl">Provider Data/EoI</a></p>
     }
-    @if (!string.IsNullOrEmpty(@Model.ResultsAndCertificationsSiteUrl))
+    @if (!string.IsNullOrEmpty(Model.ResultsAndCertificationsSiteUrl))
     {
         <p class="govuk-body"><a class="govuk-link" href="@Model.ResultsAndCertificationsSiteUrl">Results and Certifications Site</a></p>
     }
