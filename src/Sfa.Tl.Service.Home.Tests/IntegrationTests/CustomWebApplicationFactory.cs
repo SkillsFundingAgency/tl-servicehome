@@ -1,32 +1,36 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Sfa.Tl.Service.Home.Configuration;
+using Sfa.Tl.Service.Home.Extensions;
+using Sfa.Tl.Service.Home.Tests.Builders;
 
 namespace Sfa.Tl.Service.Home.Tests.IntegrationTests;
 
-public class CustomWebApplicationFactory<Program>
-    : WebApplicationFactory<Program> where Program : class
+public class CustomWebApplicationFactory<TStartup>
+    : WebApplicationFactory<TStartup> where TStartup : class
 {
-    private readonly WebApplicationFactory<Program> _factory;
-
-    public CustomWebApplicationFactory(WebApplicationFactory<Program> factory)
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        //public CustomWebApplicationFactory<Program>();WebApplicationFactory<Program> factory)
-
-        var projectDir = Directory.GetCurrentDirectory();
-        var configPath = Path.Combine(projectDir, "appsettings.json");
-
-        _factory = factory.WithWebHostBuilder(builder =>
+        builder.ConfigureAppConfiguration((_, conf) =>
         {
-            builder.ConfigureAppConfiguration((context, conf) =>
-            {
-                conf.AddJsonFile(configPath);
-            });
+            var projectDir = Directory.GetCurrentDirectory();
+            var configPath = Path.Combine(projectDir, "appsettings.json");
+            conf.AddJsonFile(configPath, true);
+        });
 
-            builder.ConfigureServices(services =>
-            {
-                var serviceProvider = services.BuildServiceProvider();
-            });
+        builder.ConfigureServices(services =>
+        {
+            //Replace settings with known test values
+            services
+                .Configure<LinkSettings>(x =>
+                {
+                    var siteConfiguration = new SettingsBuilder().BuildConfigurationOptions();
+                    x.ConfigureLinkSettings(siteConfiguration.LinkSettings);
+                });
+
+            services.BuildServiceProvider();
         });
     }
 }

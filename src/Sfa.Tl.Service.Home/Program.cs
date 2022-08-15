@@ -4,11 +4,10 @@ using Sfa.Tl.Service.Home.Security;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var siteConfiguration = builder.Configuration.LoadConfigurationOptions();
-
 builder.Services
     .AddApplicationInsightsTelemetry();
 
+var siteConfiguration = builder.Configuration.LoadConfigurationOptions();
 builder.Services
     .Configure<LinkSettings>(x =>
     {
@@ -101,8 +100,8 @@ app.MapRazorPages();
 
 app.UseResponseCaching();
 
-var _webRootPath = builder.Environment.WebRootPath;
-var _contentRootPath = builder.Environment.ContentRootPath;
+//var _webRootPath = builder.Environment.WebRootPath;
+//var _contentRootPath = builder.Environment.ContentRootPath;
 
 app.Run();
 
@@ -129,4 +128,4 @@ bool IsNotCssOrImgOrFontFile(string path)
            !path.Contains("/assets/images/");
 }
 
-public partial class Program { }; //Required so tests can see this class
+public partial class Program { } //Required so tests can see this class

@@ -10,16 +10,17 @@ public class IndexPageTests
     [Fact]
     public void IndexModel_OnGet_Populates_Page_Properties()
     {
-        var settingsBuilder = new SettingsBuilder();
-        var linkOptions = settingsBuilder.BuildLinkSettings().ToOptions();
+        var linkOptions = new SettingsBuilder()
+            .BuildLinkSettings()
+            .ToOptions();
 
         var pageModel = new IndexModel(linkOptions, Substitute.For<ILogger<IndexModel>>());
 
         pageModel.OnGet();
 
-        pageModel.EmployerSupportSiteUrl.Should().Be(settingsBuilder.DefaultEmployerSupportSiteUrl);
-        pageModel.ProviderSupportSiteUrl.Should().Be(settingsBuilder.DefaultProviderSupportSiteUrl);
-        pageModel.ProviderDataSiteUrl.Should().Be(settingsBuilder.DefaultProviderDataSiteUrl);
-        pageModel.ResultsAndCertificationsSiteUrl.Should().Be(settingsBuilder.DefaultResultsAndCertificationsSiteUrl);
+        pageModel.EmployerSupportSiteUrl.Should().Be(SettingsBuilder.DefaultEmployerSupportSiteUrl);
+        pageModel.ProviderSupportSiteUrl.Should().Be(SettingsBuilder.DefaultProviderSupportSiteUrl);
+        pageModel.ProviderDataSiteUrl.Should().Be(SettingsBuilder.DefaultProviderDataSiteUrl);
+        pageModel.ResultsAndCertificationsSiteUrl.Should().Be(SettingsBuilder.DefaultResultsAndCertificationsSiteUrl);
     }
 }

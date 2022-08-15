@@ -1,86 +1,55 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Sfa.Tl.Service.Home.Configuration;
+﻿using Sfa.Tl.Service.Home.Tests.Builders;
+using Sfa.Tl.Service.Home.Tests.TestExtensions;
+using Xunit.Abstractions;
 
 namespace Sfa.Tl.Service.Home.Tests.IntegrationTests;
 
-public class HomePageIntegrationTests 
-    //: IClassFixture<WebApplicationFactory<Program>>
-    : IClassFixture<CustomWebApplicationFactory<Program>>
+public class HomePageIntegrationTests
+: IClassFixture<CustomWebApplicationFactory<Program>>
 {
-    //private readonly WebApplicationFactory<Program> _factory;
-    private readonly CustomWebApplicationFactory<Program> _factory;
-    
-    //public HomePageIntegrationTests(WebApplicationFactory<Program> factory)
-    public HomePageIntegrationTests(CustomWebApplicationFactory<Program> factory)
+    //TODO: https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-6.0#mock-authentication
+
+    // ReSharper disable once NotAccessedField.Local
+    private readonly ITestOutputHelper _output;
+
+    private readonly CustomWebApplicationFactory<Program> _fixture;
+
+    public HomePageIntegrationTests(
+        CustomWebApplicationFactory<Program> fixture,
+        ITestOutputHelper output)
     {
-        var projectDir = Directory.GetCurrentDirectory();
-        var configPath = Path.Combine(projectDir, "appsettings.json");
-
-        //_factory = factory.WithWebHostBuilder(builder =>
-        //{
-        //    builder.ConfigureAppConfiguration((context, conf) =>
-        //    {
-        //        conf.AddJsonFile(configPath);
-        //    });
-
-        //     builder.ConfigureServices(services =>
-        //    {
-        //        var serviceProvider = services.BuildServiceProvider();
-        //    });
-
-        //});
+        _fixture = fixture;
+        _output = output;
     }
 
     [Fact]
-    public async Task HelloWorldTest()
+    public async Task IndexPage_Has_Expected_Content_Type()
     {
+        var client = _fixture.CreateClient();
 
-        /*
-    var application = new WebApplicationFactory<Program>()
-            .WithWebHostBuilder(builder =>
-            {
-                //var cfg = new ConfigurationRoot(new List<IConfigurationProvider>());
-                //cfg[ConfigurationKeys.EnvironmentNameConfigKey] = "LOCAL";
-                //cfg[ConfigurationKeys.ConfigurationStorageConnectionStringConfigKey] = "_";
-                //cfg[ConfigurationKeys.ServiceNameConfigKey] = "Any";
-                //cfg[ConfigurationKeys.VersionConfigKey] = "1.0";
-
-                //builder.UseConfiguration(cfg);
-
-                builder.ConfigureAppConfiguration(configBuilder =>
-                {
-                    var projectDir = Directory.GetCurrentDirectory();
-                    var configPath = Path.Combine(projectDir, "appsettings.json");
-                    configBuilder.AddJsonFile(configPath);
-
-                });
-
-                builder.ConfigureServices(services =>
-                {
-
-                });
-
-                //builder.ConfigureTestContainer()
-                // ... Configure test services
-            });
-        */
-
-        var client = _factory.CreateClient();
-        //...
         var response = await client.GetAsync("/");
+        response.EnsureSuccessStatusCode();
 
-        response.EnsureSuccessStatusCode(); // Status Code 200-299
         Assert.Equal("text/html; charset=utf-8",
-            response.Content.Headers.ContentType.ToString());
+            response.Content.Headers.ContentType?.ToString());
+    }
+
+    [Fact]
+    public async Task IndexPage_Loads_Links()
+    {
+        var client = _fixture.CreateClient();
+
+        var response = await client.GetAsync("/");
+        response.EnsureSuccessStatusCode();
+
+        Assert.Equal("text/html; charset=utf-8",
+            response.Content.Headers.ContentType?.ToString());
+
+        var document = await response.GetDocumentAsync();
+
+        document.ValidateLink("#tl-link-employer", SettingsBuilder.DefaultEmployerSupportSiteUrl);
+        document.ValidateLink("#tl-link-provider", SettingsBuilder.DefaultProviderSupportSiteUrl);
+        document.ValidateLink("#tl-link-provider-data", SettingsBuilder.DefaultProviderDataSiteUrl);
+        document.ValidateLink("#tl-link-results", SettingsBuilder.DefaultResultsAndCertificationsSiteUrl);
     }
 }
