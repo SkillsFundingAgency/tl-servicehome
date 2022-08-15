@@ -4,7 +4,8 @@ using AngleSharp;
 using System.Net.Http.Headers;
 
 namespace Sfa.Tl.Service.Home.Tests.TestExtensions;
-internal static class HtmlHelperExtensions
+
+public static class HtmlHelperExtensions
 {
     public static async Task<IHtmlDocument> GetDocumentAsync(this HttpResponseMessage response)
     {
@@ -15,9 +16,11 @@ internal static class HtmlHelperExtensions
 
         void ResponseFactory(VirtualResponse htmlResponse)
         {
+            if (response.RequestMessage is null) throw new ArgumentNullException(nameof(response));
+
             htmlResponse
                 .Address(response.RequestMessage.RequestUri)
-                .Status(response.StatusCode);
+            .Status(response.StatusCode);
 
             MapHeaders(response.Headers);
             MapHeaders(response.Content.Headers);
