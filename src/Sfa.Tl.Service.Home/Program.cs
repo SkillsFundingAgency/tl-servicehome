@@ -43,10 +43,23 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseXContentTypeOptions()
-   .UseReferrerPolicy(opts => opts.NoReferrer())
-   .UseXXssProtection(opts => opts.EnabledWithBlockMode())
-   .UseCsp(options => options
+app.UseReferrerPolicy(opts => opts.NoReferrer())
+    //.UseXXssProtection(opts => opts.EnabledWithBlockMode());
+    ;
+
+app.UseWhen(
+    ctx => IsNotImgFile(ctx.Request.Path),
+    //|| ctx..Response.Re.Result is ViewResult
+    app =>
+        app.UseXContentTypeOptions());
+
+app.UseWhen(
+        ctx => IsNotCssOrImgOrFontFile(ctx.Request.Path)
+        //|| ctx..Response.Re.Result is ViewResult
+        ,
+   app => 
+    app//.UseXContentTypeOptions()
+        .UseCsp(options => options
        .FrameAncestors(s => s.None())
        .ObjectSources(s => s.None())
        .ScriptSources(s => s
@@ -61,11 +74,21 @@ app.UseXContentTypeOptions()
            context.Response.Headers.Add("Expect-CT", "max-age=0, enforce");
            context.Response.Headers.Add("Permissions-Policy", SecurityPolicies.PermissionsList);
            await next.Invoke();
-       });
+       })
+    );
+
+//app.UseWhen(
+//    ctx => IsCssOrJsFile(ctx.Request.Path),
+//    app => app.UseXContentTypeOptions());
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseCookiePolicy();
+
+app.UseWhen(
+    ctx => IsNotJsOrCssFile(ctx.Request.Path),
+    app =>
+        app.UseXXssProtection(opts => opts.EnabledWithBlockMode()));
 
 app.UseRouting();
 
@@ -78,4 +101,32 @@ app.MapRazorPages();
 
 app.UseResponseCaching();
 
+var _webRootPath = builder.Environment.WebRootPath;
+var _contentRootPath = builder.Environment.ContentRootPath;
+
 app.Run();
+
+//var _fp = new PhysicalFileProvider()//
+bool IsNotJsFile(string path)
+{
+    return !path.EndsWith(".js");
+}
+
+bool IsNotImgFile(string path)
+{
+    return !path.Contains("/assets/images/");
+}
+
+bool IsNotJsOrCssFile(string path)
+{
+    return !path.EndsWith(".css") && !path.EndsWith(".js");
+}
+
+bool IsNotCssOrImgOrFontFile(string path)
+{
+    return !path.Contains(".css") && 
+           !path.Contains("/assets/fonts/") &&
+           !path.Contains("/assets/images/");
+}
+
+public partial class Program { }; //Required so tests can see this class
